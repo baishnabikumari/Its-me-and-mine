@@ -5,9 +5,11 @@ const showFirst = 6;
 projects.forEach(function (p, i) {
     const card = document.createElement("div");
     card.className = "card";
+    card.setAttribute("data-index", i);
+    card.setAttribute("data-category", p.category);
 
     if(i >= showFirst){
-        card.classList = "card";
+        card.classList.add("extra");
     }
 
     let html = '<div class="card-top">';
@@ -24,12 +26,12 @@ projects.forEach(function (p, i) {
         });
         html += "</div>";
     }
-    html += '<div class="links">';
-    html += '<a href="' + p.repo + '" target="_blank">repo</a>';
-    if(p.live){
-        html += '<a href="' + p.live + '" target="_blank">live</a>';
-    }
-    html += "</div>";
+    // html += '<div class="links">';
+    // html += '<a href="' + p.repo + '" target="_blank">repo</a>';
+    // if(p.live){
+    //     html += '<a href="' + p.live + '" target="_blank">live</a>';
+    // }
+    // html += "</div>";
 
     card.innerHTML = html;
     list.appendChild(card);
@@ -46,9 +48,82 @@ moreBtn.addEventListener("click", function () {
     }
 });
 
+const filterBar = document.getElementById("filters");
+const categories = ["All"];
+
+projects.forEach(function (p){
+    if(categories.indexOf(p.category) === -1){
+        categories.push(p.category);
+    }
+});
+categories.forEach(function (cat, i){
+    const tab = document.createElement("div");
+    tab.className = "filter-tab" + (i === 0 ? " active" : "");
+    tab.textContent = cat;
+    tab.addEventListener("click", function (){
+       document.querySelectorAll(".filter-tab").forEach(function (t){
+        t.classList.remove("active");
+       });
+       tab.classList.add("active");
+       document.querySelectorAll(".card").forEach(function (card){
+        if(cat === "All" || card.getAttribute("data-category") === cat){
+            card.classList.remove("hidden");
+        } else{
+            card.classList.add("hidden");
+        }
+       });
+    });
+    filterBar.appendChild(tab);
+});
+
+const overlay = document.getElementById("modal-overlay");
+const modalBody = document.getElementById("modal-body");
+const modalClose = document.getElementById("modal-close");
+
+document.querySelectorAll(".card").forEach(function (card){
+    card.addEventListener("click", function (){
+        const p = projects[card.getAttribute("data-index")];
+        openModal(p);
+    });
+});
+
+function openModal(p){
+    let html = "<h3>" + p.name + "</h3>";
+    if(p.desc){
+        html += "<p>" + p.desc + "</p>";
+    }
+    html += '<p class="meta">' + p.hours + "h · " + p.category + "</p>";
+    html += '<div class="links">';
+    html += '<a href="' + p.repo + '" target="_blank">repo</a>';
+    if(p.live){
+        html += '<a href="' + p.live + '" target="_blank">live</a>';
+    }
+    html += "</div>";
+
+    modalBody.innerHTML = html;
+    overlay.classList.add("open");
+}
+
+function closeModal(){
+    overlay.classList.remove("open");
+}
+modalClose.addEventListener("click", closeModal);
+
+overlay.addEventListener("click", function (e) {
+    if(e.target === overlay){
+        closeModal();
+    }
+});
+
+document.addEventListener("keydown", function (e) {
+    if(e.key === "Escape" && overlay.classList.contains("open")){
+        closeModal();
+    }
+})
+
 const nav = document.getElementById("nav");
 const navLinks = document.querySelectorAll(".nav-links a");
-const section = document.querySelectorAll("header[id] section[id]");
+const section = document.querySelectorAll("header[id], section[id]");
 
 window.addEventListener("scroll", function () {
     if(window.scrollY > 20){
@@ -68,7 +143,7 @@ const observer = new IntersectionObserver(function (entries){
             });
         }
     });
-}, { rootMargin: "-40% 0px -55px 0px" });
+}, { rootMargin: "-40% 0px -55% 0px" });
 
 section.forEach(function(s){
     observer.observe(s);
@@ -79,6 +154,12 @@ const hoursCountEl = document.getElementById("hours-count");
 const hoursSection = document.getElementById("hours");
 
 let maxHours = 0;
+projects.forEach(function (p){
+    if(p.hours > maxHours){
+        maxHours = p.hours;
+    }
+});
+
 projects.forEach(function (p){
     const row = document.createElement("div");
     row.className = "hours-row";

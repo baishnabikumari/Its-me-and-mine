@@ -46,7 +46,7 @@ a{
 }
 
 .hero h1{
-    font-size: 72;
+    font-size: 72px;
     font-weight: 600;
     letter-spacing: -2px;
     line-height: 1.1;
@@ -73,7 +73,7 @@ a{
 }
 
 #projects{
-    padding: 100px 8px;
+    padding: 100px 8vw;
 }
 
 #projects h2{
