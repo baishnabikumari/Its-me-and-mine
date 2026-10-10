@@ -389,3 +389,16 @@ footer{
     color: var(--grey);
     margin-bottom: 14px;
 }
+
+#mute-btn{
+    background: none;
+    border: none;
+    color: var(--grey);
+    font-size: 15px;
+    cursor: pointer;
+    margin-left: 24px;
+}
+
+#mute-btn:hover{
+    color: var(--text);
+}

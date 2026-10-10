@@ -209,3 +209,47 @@ function runBars(){
         }, 50);
     });
 }
+
+let audioCtx = null;
+let muted = false;
+
+function unlockAudio(){
+    if(!audioCtx){
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+}
+
+function playTone(freq, duration, volume){
+    if(muted || !audioCtx) return;
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.type = "sine";
+    osc.frequency.value = freq;
+    gain.gain.setValueAtTime(volume, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + duration);
+}
+document.body.addEventListener("click", unlockAudio, { once: true });
+const hoverTargets = document.querySelectorAll(".card, .btn, .filter-tab, .nav-links a");
+hoverTargets.forEach(function (el){
+    el.addEventListener("mouseenter", function (){
+        playTone(300, 0.08, 0.05);
+    });
+});
+
+document.addEventListener("click", function (e){
+    if(e.target.closest(".card, .btn, .filter-tab")){
+        playTone(300, 0.1, 0.08)
+    }
+});
+
+const muteBtn = document.getElementById("mute-btn");
+muteBtn.addEventListener("click", function (){
+    muted = !muted;
+    muteBtn.textContent = muted ? "🔇" : "🔊";
+})
