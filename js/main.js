@@ -73,3 +73,58 @@ const observer = new IntersectionObserver(function (entries){
 section.forEach(function(s){
     observer.observe(s);
 })
+
+const hoursList = document.getElementById("hours-list");
+const hoursCountEl = document.getElementById("hours-count");
+const hoursSection = document.getElementById("hours");
+
+let maxHours = 0;
+projects.forEach(function (p){
+    const row = document.createElement("div");
+    row.className = "hours-row";
+    const pct = (p.hours / maxHours) * 100;
+    let html = '<span class="hours-name">' + p.name + '</span>';
+    html += '<div class="track"><div class="fill" style="width:0%" data-width="' + pct + '"></div></div>';
+    html += '<span class="hours-num">' + p.hours + 'h</span>';
+
+    row.innerHTML = html;
+    hoursList.appendChild(row);
+});
+let hoursPlayed = false;
+const hoursObserver = new IntersectionObserver(function (entries){
+    entries.forEach(function (entry){
+        if(entry.isIntersecting && !hoursPlayed){
+            hoursPlayed = true;
+            runCounter();
+            runBars();
+        }
+    });
+}, { threshold: 0.4 });
+hoursObserver.observe(hoursSection);
+
+function runCounter(){
+    const duration = 1500;
+    const start = performance.now();
+
+    function tick(now){
+        let t = (now - start) / duration;
+        if(t > 1) t = 1;
+
+        const eased = 1 - Math.pow(1 - t, 3);
+        hoursCountEl.textContent = Math.round(eased * totalHours);
+
+        if(t < 1){
+            requestAnimationFrame(tick);
+        }
+    }
+    requestAnimationFrame(tick);
+}
+function runBars(){
+    const fills = document.querySelectorAll(".fill");
+    fills.forEach(function (fill){
+        const target = fill.getAttribute("data-width");
+        setTimeout(function () {
+            fill.style.width = target + "%";
+        }, 50);
+    });
+}

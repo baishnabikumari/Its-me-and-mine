@@ -5,7 +5,8 @@ const projects = [
         stack: ["JavaScript", "HTML", "CSS"],
         hours: 10,
         repo: "https://github.com/baishnabikumari/Bad-UI",
-        live: ""
+        live: "",
+        category: "Tools"
     },
     {
         name: "SnakeByte",
@@ -13,7 +14,8 @@ const projects = [
         stack: ["Pyodide", "WebAssembly"],
         hours: 44,
         repo: "https://github.com/baishnabikumari/SnakeByte---Mini-Compiler",
-        live: ""
+        live: "",
+        category: "Tools"
     },
     {
         name: "Laser Maze",
@@ -21,7 +23,8 @@ const projects = [
         stack: ["JavaScript", "HTML", "CSS"],
         hours: 36,
         repo: "https://github.com/baishnabikumari/Laser-Maze",
-        live: ""
+        live: "",
+        category: "Game"
     },
     {
         name: "Starless",
@@ -29,7 +32,8 @@ const projects = [
         stack: ["JavaScript", "HTML", "CSS"],
         hours: 13,
         repo: "https://github.com/baishnabikumari/Starless",
-        live: ""
+        live: "",
+        category: "Tools"
     },
     {
         name: "Detour",
@@ -37,7 +41,8 @@ const projects = [
         stack: ["JavaScript", "HTML", "CSS"],
         hours: 11,
         repo: "https://github.com/baishnabikumari/Detour",
-        live: ""
+        live: "",
+        category: "Tools"
     },
     {
         name: "Kanban",
@@ -45,7 +50,8 @@ const projects = [
         stack: ["JavaScript", "HTML", "CSS"],
         hours: 11,
         repo: "https://github.com/baishnabikumari/Kanban",
-        live: ""
+        live: "",
+        category: "Tools"
     },
     {
         name: "Compass",
@@ -53,7 +59,8 @@ const projects = [
         stack: ["leaflet, Vanilla Js"],
         hours: 10,
         repo: "https://github.com/baishnabikumari/Compass",
-        live: ""
+        live: "",
+        category: "Tools"
     },
     {
         name: "Chrono-Rift",
@@ -61,6 +68,9 @@ const projects = [
         stack: ["JavaScript"],
         hours: 20,
         repo: "https://github.com/baishnabikumari/Chrono-Rift",
-        live: ""
+        live: "",
+        category: "Game"
     },
-]
+];
+
+const totalHours = 833;

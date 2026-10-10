@@ -232,8 +232,160 @@ footer{
     color: var(--text);
 }
 
+#hours{
+    padding: 100px 8vw;
+}
+
+#hours h2{
+    font-size: 36px;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.hours-total{
+    color: var(--grey);
+    font-size: 18px;
+    margin-bottom: 40px;
+}
+
+#hours-count{
+    color: var(--blue);
+    font-size: 28px;
+    font-weight: 600;
+}
+
+.hours-row{
+    display: grid;
+    grid-template-columns: 120px 1fr 50px;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 14px;
+}
+
+.hours-name{
+    font-size: 14px;
+}
+
+.track{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.fill{
+    background: var(--blue);
+    height: 100%;
+    border-radius: 20px;
+    transition: width 1.2s ease;
+}
+
+.hours-num{
+    font-size: 13px;
+    color: var(--grey);
+    text-align: right;
+}
+
 @media (max-width: 600px){
     .hero h1{
         font-size: 48px;
     }
+    .hours-row{
+        grid-template-columns: 90px 1fr 40px;
+    }
+}
+
+#filters{
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.filter-tab{
+    border: 1px solid var(--line);
+    padding: 7px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    color: var(--grey);
+    cursor: pointer;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.filter-tab:hover{
+    color: var(--text);
+}
+
+.filter-tab.active{
+    color: var(--text);
+    border-color: var(--blue);
+}
+
+.card.hidden{
+    display: none;
+}
+
+.card{
+    cursor: pointer;
+}
+
+#modal-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    z-index: 20;
+}
+
+#modal-overlay.open{
+    display: flex;
+}
+
+#modal{
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 32px;
+    max-width: 480px;
+    width: 100%;
+    position: relative;
+    animation: popIn 0.25s ease;
+}
+
+@keyframes popIn{
+    from{
+        opacity: 0;
+        transform: scale(0.95);
+    }
+    to{
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+#modal-close{
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    font-size: 22px;
+    color: var(--grey);
+    cursor: pointer;
+}
+
+#modal-close:hover{
+    color: var(--text);
+}
+
+#modal-body h3{
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+#modal-body p{
+    color: var(--grey);
+    margin-bottom: 14px;
 }

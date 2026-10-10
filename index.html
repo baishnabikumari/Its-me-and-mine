@@ -16,8 +16,15 @@
             <a href="#home">Home</a>
             <a href="#projects">Projects</a>
         </div>
+        <div id="filters"></div>
+        <div id="project-list"></div>
         <div id="project-list"></div>
         <button id="more-btn" class="btn">show more</button>
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#projects">Projects</a>
+            <a href="#hours">Hours</a>
+        </div>
     </nav>
     <header class="hero" id="home">
         <p class="small">student developer</p>
@@ -29,11 +36,23 @@
         <h2>Porjects</h2>
         <div id="project-list"></div>
     </section>
+    <section id="hours">
+        <h2>Hours</h2>
+        <p class="hours-total"><span id="hours-count">0</span>h on Hackatime</p>
+        <div id="hours-list"></div>
+    </section>
 
     <footer>
         <p>made by Baishnabi</p>
     </footer>
     <script src="js/projects.js"></script>
     <script src="js/main.js"></script>
+
+    <div id="modal-overlay">
+        <div id="modal">
+            <button id="modal-close">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
 </body>
 </html>
