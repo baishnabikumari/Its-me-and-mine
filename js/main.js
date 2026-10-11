@@ -273,7 +273,7 @@ window.addEventListener("load", function (){
     hero.classList.add("loaded");
 });
 
-const revealEls = document.querySelectorAll("#projects h2, #hours h2, .hours-row");
+const revealEls = document.querySelectorAll("#about h2, #about .about-text, #about .skills, #projects h2, #hours h2, .hours-row");
 revealEls.forEach(function (el) {
     el.classList.add("reveal");
 });
@@ -339,3 +339,76 @@ if(!reduceMotion && window.matchMedia("(pointer: fine)").matches){
         });
     });
 }
+
+const progressBar = document.getElementById("progress-bar");
+
+function updateProgressBar(){
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = docHeight > 0 ? (scrollTop / docHeight) * 100 : 0;
+    progressBar.style.width = pct + "%";
+}
+
+window.addEventListener("scroll", updateProgressBar);
+window.addEventListener("resize", updateProgressBar);
+updateProgressBar();
+
+if(!reduceMotion){
+    document.querySelectorAll(".card").forEach(function (card){
+        card.addEventListener("mousemove", function (e){
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
+            const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
+            card.style.transform = "perspective(600px) rotateX(" + rotateX + "deg) rotate(" + rotateY + "deg) translateY(-4px)";
+        });
+        card.addEventListener("mouseleave", function (){
+            card.style.transform = "";
+        });
+    });
+}
+
+const themeBtn = document.getElementById("theme-btn");
+const savedTheme = localStorage.getItem("theme");
+
+if(savedTheme === "light"){
+    document.documentElement.setAttribute("data-theme", "light");
+    themeBtn.textContent = "☀️";
+}
+
+function toggleTheme(){
+    unlockAudio();
+    const isLight = document.documentElement.getAttribute("data-theme") === "light";
+    if(isLight){
+        document.documentElement.removeAttribute("data-theme");
+        themeBtn.textContent = "🌙";
+        localStorage.setItem("theme", "dark");
+    } else {
+        document.documentElement.setAttribute("data-theme", "light");
+        themeBtn.textContent = "☀️";
+        localStorage.setItem("theme", "light");
+    }
+    playTone(isLight ? 300 : 500, 0.12, 0.08);
+}
+themeBtn.addEventListener("click", toggleTheme);
+const konamiCode = ["ArrowUp","ArrowUp","ArrowDown","ArrowDown","ArrowLeft","ArrowRight","ArrowLeft","ArrowRight","KeyB","KeyA"];
+let konamiIndex = 0;
+
+document.addEventListener("keydown", function (e){
+    if(e.code === konamiCode[konamiIndex]){
+        konamiIndex++;
+        if(konamiIndex === konamiCode.length){
+            konamiIndex = 0;
+            toggleTheme();
+            if(!reduceMotion){
+                document.body.classList.add("konami-flash");
+                setTimeout(function (){
+                    document.body.classList.remove("konami-flash");
+                }, 600);
+            }
+        }
+    } else {
+        konamiIndex = 0;
+    }
+});
