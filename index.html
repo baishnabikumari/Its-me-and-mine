@@ -12,7 +12,28 @@
 </head>
 <body>
     <div id="progress-bar"></div>
-    <div id="cursor-dot"></div>
+    <div id="ghost" class="ghost">
+        <div class="ghost__head">
+            <div class="ghost__eyes"></div>
+            <div class="ghost__mouth"></div>
+        </div>
+        <div class="ghost__tail">
+            <div class="ghost__rip"></div>
+        </div>
+    </div>
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <filter id="goo">
+                <feGaussianBlur in="SourceGraphic" stdDeviation="10" result="ghost-blur" />
+                <feColorMatrix in="ghost-blur" mode="matrix"
+                    values="1 0 0 0 0
+                            0 1 0 0 0
+                            0 0 1 0 0
+                            0 0 0 16 -7"
+                    result="ghost-gooey"/>
+            </filter>
+        </defs>
+    </svg>
     <nav id="nav">
         <a href="#home" class="logo">Baishnabi</a>
         <div class="nav-links">

@@ -323,21 +323,63 @@ if(!reduceMotion){
 }
 
 if(!reduceMotion && window.matchMedia("(pointer: fine)").matches){
-    const cursorDot = document.getElementById("cursor-dot");
+    const ghostEl = document.getElementById("ghost");
+    ghostEl.style.display = "block";
 
-    document.addEventListener("mousemove", function (e){
-        cursorDot.style.left = e.clientX + "px";
-        cursorDot.style.top = e.clientY + "px";
-    });
-    const bigTargets = document.querySelectorAll("a, button, .card");
-    bigTargets.forEach(function (el){
-        el.addEventListener("mouseenter", function(){
-            cursorDot.classList.add("big");
-        });
-        el.addEventListener("mouseleave", function (){
-            cursorDot.classList.remove("big");
-        });
-    });
+    let mouse = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    let clicked = false;
+
+    function getMouse(e){
+        mouse.x = e.clientX;
+        mouse.y = e.clientY;
+    }
+    window.addEventListener("mousemove", getMouse);
+    window.addEventListener("mousedown", function (){ clicked = true; });
+    window.addEventListener("mouseup", function (){ clicked = false; });
+
+    function map(num, inMin, inMax, outMin, outMax){
+        return (num - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+    }
+    const ghost = {
+        el: ghostEl,
+        mouth: ghostEl.querySelector(".ghost__mouth"),
+        eyes: ghostEl.querySelector(".ghost__eyes"),
+        pos: {x: mouse.x, y: mouse.y },
+
+        follow: function (){
+            const distX = mouse.x - this.pos.x;
+            const distY = mouse.y - this.pos.y;
+            const velX = distX / 8;
+            const velY = distY / 8;
+
+            this.pos.x += distX / 10;
+            this.pos.y += distY / 10;
+
+            const skewX = map(velX, 0, 100, 0, -50);
+            const scaleY = map(velY, 0, 100, 1, 2.0);
+            const scaleEyeX = map(Math.abs(velX), 0, 100, 1, 1.2);
+            let scaleEyeY = map(Math.abs(velX * 2), 0, 100, 1, 0.1);
+            let scaleMouth = Math.min(
+                Math.max(
+                    map(Math.abs(velX * 1.5), 0, 100, 0, 10),
+                    map(Math.abs(velY * 1.2), 0, 100, 0, 5)
+                ),
+                2
+            );
+            if(clicked){
+                scaleEyeY = 0.4;
+                scaleMouth = -scaleMouth;
+            }
+            this.el.style.transform = "translate(" + this.pos.x + "px, " + this.pos.y + "px) scale(.7) skew(" + skewX + "deg) rotate(" + -skewX + "deg) scaleY(" + scaleY + ")";
+            this.eyes.style.transform = "translateX(-50%) scale(" + scaleEyeX + "," + scaleEyeY + ")";
+            this.mouth.style.transform = "translate(" + (-skewX * 0.5 - 10) + "px) scale(" + scaleMouth + ")";
+        }
+    };
+    function renderGhost(){
+        requestAnimationFrame(renderGhost);
+        ghost.follow();
+    }
+    renderGhost();
 }
 
 const progressBar = document.getElementById("progress-bar");
