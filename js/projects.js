@@ -56,7 +56,7 @@ const projects = [
     {
         name: "Compass",
         desc: "Build a trip itinerary for you",
-        stack: ["leaflet, Vanilla Js"],
+        stack: ["Leaflet", "Vanilla JS"],
         hours: 10,
         repo: "https://github.com/baishnabikumari/Compass",
         live: "",

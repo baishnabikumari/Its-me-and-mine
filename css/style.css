@@ -102,7 +102,7 @@ a{
     border: 1px solid var(--line);
     border-radius: 12px;
     padding: 22px;
-    transition: transform 0.15s else-out, border-color 0.25s;
+    transition: transform 0.15s ease-out, border-color 0.25s;
 }
 
 .card:hover{
@@ -145,7 +145,7 @@ a{
 }
 
 .card.extra:not(.hidden){
-    animation: fadeup 0.4s ease;
+    animation: fadeUp 0.4s ease;
 }
 
 @keyframes fadeUp{
@@ -300,7 +300,7 @@ footer{
     }
     #nav{
         height: auto;
-        min-height: 60;
+        min-height: 60px;
         flex-wrap: wrap;
         padding: 12px 6vw;
         row-gap: 8px;
@@ -450,7 +450,7 @@ footer{
 .hero > *{
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.7s ease, transfrom 0.7s ease;
+    transition: opacity 0.7s ease, transform 0.7s ease;
 }
 
 .hero.loaded > *{
@@ -467,7 +467,7 @@ footer{
 .hero.loaded > *:nth-child(3){
     transition-delay: 0.2s;
 }
-.hero-loaded > *:nth-child(4){
+.hero.loaded > *:nth-child(4){
     transition-delay: 0.3s;
 }
 
@@ -503,6 +503,10 @@ footer{
 
 #about{
     padding: 100px 8vw;
+}
+
+#about h2{
+    font-size: 36px;
     font-weight: 600;
     margin-bottom: 16px;
 }

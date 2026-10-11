@@ -266,7 +266,7 @@ muteBtn.addEventListener("click", function (){
     muteBtn.textContent = muted ? "🔇" : "🔊";
 })
 
-const reduceMotion = window.matchMedia("(prefers-reduce-motion: reduce)").matches;
+const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 const hero = document.querySelector(".hero");
 window.addEventListener("load", function (){
@@ -361,7 +361,7 @@ if(!reduceMotion){
             const y = e.clientY - rect.top;
             const rotateX = ((y - rect.height / 2) / (rect.height / 2)) * -6;
             const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * 6;
-            card.style.transform = "perspective(600px) rotateX(" + rotateX + "deg) rotate(" + rotateY + "deg) translateY(-4px)";
+            card.style.transform = "perspective(600px) rotateX(" + rotateX + "deg) rotateY(" + rotateY + "deg) translateY(-4px)";
         });
         card.addEventListener("mouseleave", function (){
             card.style.transform = "";
