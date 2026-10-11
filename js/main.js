@@ -36,16 +36,30 @@ projects.forEach(function (p, i) {
     card.innerHTML = html;
     list.appendChild(card);
 });
-if (projects.length <= showFirst){
-    moreBtn.style.display = "none";
+
+let currentFilter = "All";
+let showMoreOpen = false;
+
+function updateCardVisibility(){
+    let extraMatchCount = 0;
+
+    document.querySelectorAll(".card").forEach(function (card){
+        const matchesFilter = currentFilter === "All" || card.getAttribute("data-category") === currentFilter;
+        const isExtra = card.classList.contains("extra");
+
+        if(matchesFilter && isExtra){
+            extraMatchCount++;
+        }
+        const shouldShow = matchesFilter && (!isExtra || showMoreOpen);
+        card.classList.toggle("hidden", !shouldShow);
+    });
+    moreBtn.style.display = extraMatchCount > 0 ? "" : "none";
+    moreBtn.textContent = showMoreOpen ? "show less" : "show more";
 }
+
 moreBtn.addEventListener("click", function () {
-    list.classList.toggle("open");
-    if(list.classList.contains("open")){
-        moreBtn.textContent = "show less";
-    } else {
-        moreBtn.textContent = "show more";
-    }
+    showMoreOpen = !showMoreOpen;
+    updateCardVisibility();
 });
 
 const filterBar = document.getElementById("filters");
@@ -65,16 +79,14 @@ categories.forEach(function (cat, i){
         t.classList.remove("active");
        });
        tab.classList.add("active");
-       document.querySelectorAll(".card").forEach(function (card){
-        if(cat === "All" || card.getAttribute("data-category") === cat){
-            card.classList.remove("hidden");
-        } else{
-            card.classList.add("hidden");
-        }
+
+       currentFilter = cat;
+       showMoreOpen = false;
+       updateCardVisibility();
        });
-    });
     filterBar.appendChild(tab);
 });
+updateCardVisibility();
 
 const overlay = document.getElementById("modal-overlay");
 const modalBody = document.getElementById("modal-body");
@@ -253,3 +265,77 @@ muteBtn.addEventListener("click", function (){
     muted = !muted;
     muteBtn.textContent = muted ? "🔇" : "🔊";
 })
+
+const reduceMotion = window.matchMedia("(prefers-reduce-motion: reduce)").matches;
+
+const hero = document.querySelector(".hero");
+window.addEventListener("load", function (){
+    hero.classList.add("loaded");
+});
+
+const revealEls = document.querySelectorAll("#projects h2, #hours h2, .hours-row");
+revealEls.forEach(function (el) {
+    el.classList.add("reveal");
+});
+
+const fadeEls = document.querySelectorAll(".card:not(.extra)");
+fadeEls.forEach(function (el){
+    el.classList.add("fade-in");
+});
+
+if(reduceMotion){
+    revealEls.forEach(function (el){
+        el.classList.add("visible");
+    });
+    fadeEls.forEach(function (el){
+        el.classList.add("visible");
+    });
+} else {
+    const revealObserver = new IntersectionObserver(function (entries, obs){
+        entries.forEach(function (entry){
+            if(entry.isIntersecting){
+                entry.target.classList.add("visible");
+                obs.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.2 });
+    revealEls.forEach(function (el){
+        revealObserver.observe(el);
+    });
+    fadeEls.forEach(function (el){
+        revealObserver.observe(el);
+    });
+}
+
+if(!reduceMotion){
+    const magnets = document.querySelectorAll(".btn");
+    magnets.forEach(function (btn){
+        btn.addEventListener("mousemove", function (e){
+            const rect = btn.getBoundingClientRect();
+            const x = e.clientX - rect.left - rect.width / 2;
+            const y = e.clientY - rect.top - rect.height / 2;
+            btn.style.transform = "translate(" + x * 0.3 + "px," + y * 0.3 + "px)";
+        });
+        btn.addEventListener("mouseleave", function (){
+            btn.style.transform = "translate(0, 0)";
+        });
+    });
+}
+
+if(!reduceMotion && window.matchMedia("(pointer: fine)").matches){
+    const cursorDot = document.getElementById("cursor-dot");
+
+    document.addEventListener("mousemove", function (e){
+        cursorDot.style.left = e.clientX + "px";
+        cursorDot.style.top = e.clientY + "px";
+    });
+    const bigTargets = document.querySelectorAll("a, button, .card");
+    bigTargets.forEach(function (el){
+        el.addEventListener("mouseenter", function(){
+            cursorDot.classList.add("big");
+        });
+        el.addEventListener("mouseleave", function (){
+            cursorDot.classList.remove("big");
+        });
+    });
+}
